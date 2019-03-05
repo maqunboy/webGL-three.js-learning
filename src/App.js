@@ -22,7 +22,6 @@ class App extends React.Component {
     const spotLight = new THREE.SpotLight(0xffffff);
     spotLight.position.set(-4000, 4000, 1500);
     spotLight.target.position.set(1000, 3800, 1000);
-    // spotLight.castShadow = true;
     return spotLight;
   }
 
@@ -30,15 +29,9 @@ class App extends React.Component {
     // 创建圆形
     const sphereGeometry = new THREE.SphereGeometry(30, 40, 400);
     // wireframe: true
-    const sphereMaterial = new THREE.MeshPhongMaterial({
-      color: 0x666666
-    });
+    const sphereMaterial = new THREE.MeshPhongMaterial();
     // 贴图
-    sphereMaterial.specularMap = new THREE.TextureLoader().load(require('./earth_img.jpeg'));
-
-    sphereMaterial.specular = new THREE.Color(0x00ffff);
-
-    sphereMaterial.shininess = 20;
+    sphereMaterial.map = new THREE.TextureLoader().load(require('./earth_living.jpg'));
 
     const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
     // 设置位置
