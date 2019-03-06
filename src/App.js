@@ -15,12 +15,18 @@ class App extends React.Component {
     return { scene, camera, renderer }
   }
 
+  spot = () => {
+    // 添加一个聚光灯
+    const spotLight = new THREE.SpotLight(0xffffff);
+    spotLight.position.set(-4000, 4000, 1500);
+    return spotLight;
+  }
+
   circular = () => {
     // 创建圆形
     const sphereGeometry = new THREE.SphereGeometry(30, 40, 400);
-    // MeshPhongMaterial
     const sphereMaterial = new THREE.MeshPhongMaterial({
-      color: 0xffff00,
+      color: 0xffffff,
       wireframe: true
     });
 
@@ -36,28 +42,18 @@ class App extends React.Component {
   componentDidMount () {
     const { scene, camera, renderer } = this.common();
     const sphere = this.circular();
-
-    // const spotLight = new THREE.SpotLight( 0xffffff );
-    // spotLight.position.set( 100, 1000, 100 );
-
-    // spotLight.castShadow = true;
-
-    // spotLight.shadow.mapSize.width = 1024;
-    // spotLight.shadow.mapSize.height = 1024;
-
-    // spotLight.shadow.camera.near = 500;
-    // spotLight.shadow.camera.far = 4000;
-    // spotLight.shadow.camera.fov = 30;
-
-    // scene.add( spotLight );
+    const spotLight = this.spot();
 
     // 添加圆形
     scene.add(sphere);
 
+    // 添加聚光灯
+    scene.add(spotLight);
+
     // 设置相机的位置
-    camera.position.x = 100;
-    camera.position.y = 100;
-    camera.position.z = -100;
+    camera.position.x = -30;
+    camera.position.y = 40;
+    camera.position.z = 30;
     camera.lookAt(scene.position);
 
     // 绑定元素
