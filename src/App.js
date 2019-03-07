@@ -9,10 +9,12 @@ class App extends React.Component {
     const scene = new THREE.Scene();
     // 创建相机
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    // 创建一个获取环境贴图的cubeCamera
+    const cubeCamera = new THREE.CubeCamera(0.1, 1000, 256);
     // 创建渲染器
     const renderer = new THREE.WebGLRenderer();
     renderer.setSize( window.innerWidth, window.innerHeight );
-    return { scene, camera, renderer }
+    return { scene, camera, renderer, cubeCamera }
   }
 
   spot = () => {
@@ -26,10 +28,10 @@ class App extends React.Component {
   circular = () => {
     // 创建圆形
     const sphereGeometry = new THREE.SphereGeometry(30, 40, 400);
-    const sphereMaterial = new THREE.MeshPhongMaterial({
-      color: 0x666666,
-      wireframe: true
-    });
+    // wireframe: true
+    const sphereMaterial = new THREE.MeshPhongMaterial();
+    // 贴图
+    sphereMaterial.map = new THREE.TextureLoader().load(require('./earth_living.jpg'));
 
     const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
     // 设置位置
@@ -40,8 +42,13 @@ class App extends React.Component {
     return sphere;
   }
 
+  background = () => {
+    // 创建星空
+    
+  }
+
   componentDidMount () {
-    const { scene, camera, renderer } = this.common();
+    const { scene, camera, renderer, cubeCamera } = this.common();
     const sphere = this.circular();
     const spotLight = this.spot();
 
@@ -50,6 +57,9 @@ class App extends React.Component {
 
     // 添加聚光灯
     scene.add(spotLight);
+
+    // 添加场景贴图相机
+    scene.add(cubeCamera);
 
     // 设置相机的位置
     camera.position.x = -30;
