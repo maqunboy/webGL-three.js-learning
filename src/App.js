@@ -9,12 +9,11 @@ class App extends React.Component {
     const scene = new THREE.Scene();
     // 创建相机
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-    // 创建一个获取环境贴图的cubeCamera
-    const cubeCamera = new THREE.CubeCamera(0.1, 1000, 256);
+
     // 创建渲染器
-    const renderer = new THREE.WebGLRenderer();
+    const renderer = new THREE.WebGLRenderer({antialias: true, alpha: true});
     renderer.setSize( window.innerWidth, window.innerHeight );
-    return { scene, camera, renderer, cubeCamera }
+    return { scene, camera, renderer }
   }
 
   spot = () => {
@@ -33,6 +32,8 @@ class App extends React.Component {
     // 贴图
     sphereMaterial.map = new THREE.TextureLoader().load(require('./earth_living.jpg'));
 
+    console.log(sphereMaterial.map, '--1--');
+
     const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
     // 设置位置
     sphere.position.x = 0;
@@ -48,7 +49,8 @@ class App extends React.Component {
   }
 
   componentDidMount () {
-    const { scene, camera, renderer, cubeCamera } = this.common();
+    // 设置背景图片
+    const { scene, camera, renderer } = this.common();
     const sphere = this.circular();
     const spotLight = this.spot();
 
@@ -57,9 +59,6 @@ class App extends React.Component {
 
     // 添加聚光灯
     scene.add(spotLight);
-
-    // 添加场景贴图相机
-    scene.add(cubeCamera);
 
     // 设置相机的位置
     camera.position.x = -30;
@@ -74,6 +73,7 @@ class App extends React.Component {
       // 添加旋转
       sphere.rotation.y -= 0.01;
       requestAnimationFrame(render); 
+      renderer.setClearAlpha(0);
       renderer.render(scene, camera);
     }
     render();
