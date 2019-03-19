@@ -2,19 +2,16 @@ import React from 'react';
 import * as THREE from 'three';
 import './App.css';
 
+// 创建场景
+const scene = new THREE.Scene();
+
+// 创建相机
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+
+// 创建渲染器
+const renderer = new THREE.WebGLRenderer({antialias: true, alpha: true});
+
 class App extends React.Component {
-
-  common = () => {
-    // 创建场景
-    const scene = new THREE.Scene();
-    // 创建相机
-    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-
-    // 创建渲染器
-    const renderer = new THREE.WebGLRenderer({antialias: true, alpha: true});
-    renderer.setSize( window.innerWidth, window.innerHeight );
-    return { scene, camera, renderer }
-  }
 
   spot = () => {
     // 添加一个聚光灯
@@ -32,25 +29,20 @@ class App extends React.Component {
     // 贴图
     sphereMaterial.map = new THREE.TextureLoader().load(require('./earth_living.jpg'));
 
-    console.log(sphereMaterial.map, '--1--');
-
     const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
     // 设置位置
-    sphere.position.x = 0;
-    sphere.position.y = 0;
-    sphere.position.z = 0;
-    
+    sphere.position.set(0, 0, 0);
     return sphere;
   }
 
-  background = () => {
-    // 创建星空
-    
+  sphereRotate = (sphere, e) => {
+    // 监听鼠标移动
+    // sphere.rotateX(Math.PI/4);//绕x轴旋转π/4
+    // console.log(e);
   }
 
   componentDidMount () {
     // 设置背景图片
-    const { scene, camera, renderer } = this.common();
     const sphere = this.circular();
     const spotLight = this.spot();
 
@@ -61,10 +53,17 @@ class App extends React.Component {
     scene.add(spotLight);
 
     // 设置相机的位置
-    camera.position.x = -30;
-    camera.position.y = 40;
-    camera.position.z = 30;
+    camera.position.set(-30, 40, 30);
     camera.lookAt(scene.position);
+
+    // 监听鼠标点击事件
+    renderer.domElement.draggable = true;
+    renderer.domElement.addEventListener('dragstart', e => {
+      console.log(e, '----dragstart---');
+    }, false);
+    renderer.domElement.addEventListener('dragend', e => {
+      console.log(e, '----dragend----');
+    }, false);
 
     // 绑定元素
     document.getElementById("WebGL-output").appendChild(renderer.domElement);
@@ -73,6 +72,7 @@ class App extends React.Component {
       // 添加旋转
       sphere.rotation.y -= 0.01;
       requestAnimationFrame(render); 
+      renderer.setSize( window.innerWidth, window.innerHeight );
       renderer.setClearAlpha(0);
       renderer.render(scene, camera);
     }
