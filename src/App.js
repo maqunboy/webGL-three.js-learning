@@ -1,6 +1,7 @@
 import React from 'react';
 import * as THREE from 'three';
 import './App.css';
+import OrbitControls from 'three-orbitcontrols';
 
 // 创建场景
 const scene = new THREE.Scene();
@@ -12,6 +13,11 @@ const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerH
 const renderer = new THREE.WebGLRenderer({antialias: true, alpha: true});
 
 class App extends React.Component {
+
+  state = {
+    x: 0,
+    y: 0,
+  }
 
   spot = () => {
     // 添加一个聚光灯
@@ -35,16 +41,12 @@ class App extends React.Component {
     return sphere;
   }
 
-  sphereRotate = (sphere, e) => {
-    // 监听鼠标移动
-    // sphere.rotateX(Math.PI/4);//绕x轴旋转π/4
-    // console.log(e);
-  }
-
   componentDidMount () {
     // 设置背景图片
     const sphere = this.circular();
     const spotLight = this.spot();
+    // const controls_1 = new OrbitControls(camera);
+    // const controls_2 = new OrbitControls(spotLight);
 
     // 添加圆形
     scene.add(sphere);
@@ -54,15 +56,25 @@ class App extends React.Component {
 
     // 设置相机的位置
     camera.position.set(-30, 40, 30);
+    // controls_1.update();
+    // controls_2.update();
     camera.lookAt(scene.position);
 
     // 监听鼠标点击事件
     renderer.domElement.draggable = true;
     renderer.domElement.addEventListener('dragstart', e => {
-      console.log(e, '----dragstart---');
+      this.setState({
+        x: e.clientX,
+        y: e.clientY,
+      })
     }, false);
     renderer.domElement.addEventListener('dragend', e => {
-      console.log(e, '----dragend----');
+      let { x, y } = this.state;
+      this.setState({
+        x: e.clientX - x,
+        y: e.clientY - y,
+      })
+      sphere.rotateY(Math.atan(e.clientY - y/e.clientX - x));
     }, false);
 
     // 绑定元素
@@ -72,6 +84,8 @@ class App extends React.Component {
       // 添加旋转
       sphere.rotation.y -= 0.01;
       requestAnimationFrame(render); 
+      // controls_1.update();
+      // controls_2.update();
       renderer.setSize( window.innerWidth, window.innerHeight );
       renderer.setClearAlpha(0);
       renderer.render(scene, camera);
