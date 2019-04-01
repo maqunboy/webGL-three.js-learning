@@ -1,4 +1,4 @@
-body {
+#WebGL-output {
   margin: 0;
   overflow: hidden; /* 溢出隐藏 */
   background: url("./bg.jpg") center no-repeat;
