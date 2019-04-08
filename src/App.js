@@ -25,6 +25,7 @@ class App extends React.Component {
   circular = () => {
     // 创建圆形
     const sphereGeometry = new THREE.SphereGeometry(30, 40, 400);
+    // MeshBasicMaterial
     const sphereMaterial = new THREE.MeshPhongMaterial({
       color: 0xffffff,
       wireframe: true
