@@ -1,7 +1,8 @@
 import React from 'react';
 import * as THREE from 'three';
-import './App.css';
-// import OrbitControls from 'three-orbitcontrols';
+import './Earth.css';
+import OrbitControls from 'three-orbitcontrols';
+
 
 // 创建场景
 const scene = new THREE.Scene();
@@ -12,8 +13,8 @@ const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerH
 // 创建渲染器
 const renderer = new THREE.WebGLRenderer({antialias: true, alpha: true});
 
-class App extends React.Component {
-
+class Earth extends React.Component {
+  
   spot = () => {
     // 添加一个聚光灯
     const spotLight = new THREE.SpotLight(0xffffff);
@@ -40,8 +41,8 @@ class App extends React.Component {
     // 设置背景图片
     const sphere = this.circular();
     const spotLight = this.spot();
-    // const controls_1 = new OrbitControls(camera);
-    // const controls_2 = new OrbitControls(spotLight);
+    const controls_canera = new OrbitControls(camera);
+    const controls_spotlight = new OrbitControls(spotLight);
 
     // 添加圆形
     scene.add(sphere);
@@ -51,20 +52,9 @@ class App extends React.Component {
 
     // 设置相机的位置
     camera.position.set(-30, 40, 30);
-    // controls_1.update();
-    // controls_2.update();
+    controls_canera.update();
+    controls_spotlight.update();
     camera.lookAt(scene.position);
-
-    // 监听鼠标点击事件
-    renderer.domElement.draggable = true;
-    renderer.domElement.addEventListener('dragend', e => {
-      var a = new THREE.Euler( 0, 1.57, 0, 'XYZ' );
-      var b = new THREE.Vector3( 1, 1, 1 );
-      b.applyEuler(a);
-      sphere.rotateX(b.x);
-      sphere.rotateY(b.y);
-      sphere.rotateZ(b.z);
-    }, false);
 
     // 绑定元素
     document.getElementById("WebGL-output").appendChild(renderer.domElement);
@@ -73,8 +63,8 @@ class App extends React.Component {
       // 添加旋转
       sphere.rotation.y -= 0.01;
       requestAnimationFrame(render); 
-      // controls_1.update();
-      // controls_2.update();
+      controls_canera.update();
+      controls_spotlight.update();
       renderer.setSize( window.innerWidth, window.innerHeight );
       renderer.setClearAlpha(0);
       renderer.render(scene, camera);
@@ -89,4 +79,4 @@ class App extends React.Component {
   }
 }
 
-export default App;
+export default Earth;
