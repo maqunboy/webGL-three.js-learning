@@ -20,7 +20,7 @@ class App extends React.Component {
     const sphereGeometry = new THREE.SphereGeometry(30, 40, 400);
     // MeshBasicMaterial
     const sphereMaterial = new THREE.MeshPhongMaterial({
-      color: 0xffff00,
+      color: 0xffffff,
       wireframe: true
     });
 
@@ -38,16 +38,7 @@ class App extends React.Component {
     const sphere = this.circular();
 
     // const spotLight = new THREE.SpotLight( 0xffffff );
-    // spotLight.position.set( 100, 1000, 100 );
-
-    // spotLight.castShadow = true;
-
-    // spotLight.shadow.mapSize.width = 1024;
-    // spotLight.shadow.mapSize.height = 1024;
-
-    // spotLight.shadow.camera.near = 500;
-    // spotLight.shadow.camera.far = 4000;
-    // spotLight.shadow.camera.fov = 30;
+    // spotLight.position.set( -4000, 4000, 1500 );
 
     // scene.add( spotLight );
 
@@ -55,9 +46,9 @@ class App extends React.Component {
     scene.add(sphere);
 
     // 设置相机的位置
-    camera.position.x = 100;
-    camera.position.y = 100;
-    camera.position.z = -100;
+    camera.position.x = -30;
+    camera.position.y = 40;
+    camera.position.z = 30;
     camera.lookAt(scene.position);
 
     // 绑定元素
