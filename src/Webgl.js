@@ -3,6 +3,8 @@ import React from 'react';
 // 获取顶点着色器源码
 const vertexShaderSource = `void main(){
     //声明顶点位置
+    //在JavaScript中你可以把它想象成 gl_Position = {x: 0, y: 0, z: 0, w: 0}。
+    //属性默认值是0, 0, 0, 1，然后属性将会从缓冲中获取前两个值（ x 和 y ）。 z和w还是默认值 0 和 1 。
     gl_Position = vec4(0.0, 0.0, 0.0, 1.0);
     //声明要绘制的点的大小。
     gl_PointSize = 10.0;
@@ -11,7 +13,8 @@ const vertexShaderSource = `void main(){
 
 const fragmentShaderSource = `void main(){
     //设置像素颜色为红色
-   gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0); 
+    //其中1代表红色值，0代表绿色值， 0.5代表蓝色值，最后一个1表示阿尔法通道值。
+    gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0); 
 }`
 class Webgl extends React.Component {
     componentDidMount () {
@@ -22,9 +25,11 @@ class Webgl extends React.Component {
          * <canvas> 元素有一个叫做 getContext() 的方法，这个方法是用来获得渲染上下文和它的绘画功能。
          */
         const gl = canvas.getContext('webgl') || canvas.getContext("experimental-webgl");
+        console.log(gl);
 
         /***************** 创建顶点着色器 *******************/
         // 创建顶点着色器对象
+        // https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/Constants
         const vertexShader = gl.createShader(gl.VERTEX_SHADER);
         // 将源码分配给顶点着色器对象
         gl.shaderSource(vertexShader, vertexShaderSource);
