@@ -28,7 +28,6 @@ class App extends React.Component {
     // MeshBasicMaterial
     const sphereMaterial = new THREE.MeshPhongMaterial({
       color: 0xffffff,
-      wireframe: true
     });
 
     const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
